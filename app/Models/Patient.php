@@ -6,5 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Patient extends Model
 {
-    //
+    /**
+     * Получить визиты пациента.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function visits()
+    {
+        return $this->hasMany('Clinic\Models\Visit');
+    }
 }
