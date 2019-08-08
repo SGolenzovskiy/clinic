@@ -11,6 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('pages.index');
-});
+Route::get('/', ['uses' => 'PageController']);
+Route::get('{specialization}', ['uses' => 'PageController@view']);
+
+Route::post('ajax-visit', ['uses' => 'VisitController@visit'])->name('ajax-visit');

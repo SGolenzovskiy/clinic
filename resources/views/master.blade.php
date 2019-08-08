@@ -13,5 +13,6 @@
     @yield('content')
 </div>
 <script src="{{ mix('/js/app.js') }}"></script>
+@include('modal.visit-form')
 </body>
 </html>
