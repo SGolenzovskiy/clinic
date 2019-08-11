@@ -2,9 +2,7 @@
 
 namespace Clinic\Models;
 
-use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Clinic\VisitRegistrationInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class Visit extends Model
@@ -29,16 +27,6 @@ class Visit extends Model
     private $allSlots = [];
 
     /**
-     * Visit constructor.
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->setSlots();
-    }
-
-    /**
      * Получить доктора, проводящего прием.
 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -61,7 +49,7 @@ class Visit extends Model
     /**
      * Расчет номерков (слотов)
      */
-    private function setSlots()
+    public function setSlotsPerDay($date)
     {
         $period = CarbonPeriod::create(self::START_VISITS, self::DURATION_VISIT . ' minutes', self::END_VISITS);
         $dates = $period->toArray();
@@ -69,10 +57,17 @@ class Visit extends Model
         foreach ($dates as $slot) {
             $start  = $slot->format('H:i');
             $end    = $slot->addMinutes(self::DURATION_VISIT)->format('H:i');
-            $this->allSlots[$slot->format("Y-m-d $start:s")] = [$start, $end];
+            $this->allSlots[$slot->format("$date $start:s")] = [$start, $end];
         }
     }
 
+    /**
+     * Получить занятые слоты (номерки) за день по id доктора.
+     *
+     * @param $date
+     * @param $doctorId
+     * @return array
+     */
     public function getSlotsByDayByDoctor($date, $doctorId)
     {
         $slots = $this::where('date', 'like', "$date%")->where('doctor_id', $doctorId)->get();
@@ -89,6 +84,12 @@ class Visit extends Model
         return ($this::where('date', 'like', "$date%")->where('doctor_id', $doctorId)->count() > 0) ? false : true;
     }
 
+    /**
+     * Получить свободные слоты (номерки).
+     *
+     * @param $busySlots
+     * @return array
+     */
     public function getFreeSlots($busySlots)
     {
         return array_diff_key($this->allSlots, $busySlots);

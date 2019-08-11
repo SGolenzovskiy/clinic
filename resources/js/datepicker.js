@@ -32,6 +32,7 @@ let clinicApp = {
             })
             .catch(function (error) {
                 // handle error
+                alert('Ощибка. Повторите запрос позднее.');
                 console.log(error);
             });
     },

@@ -7,7 +7,13 @@ use Clinic\Models\Patient;
 use Clinic\Models\Visit;
 use Illuminate\Http\Request;
 
-class VisitController extends Controller
+/**
+ * Контроллер Ajax запросов.
+ *
+ * Class AjaxController
+ * @package Clinic\Http\Controllers
+ */
+class AjaxController extends Controller
 {
     /**
      * Ajax регистрация визита
@@ -58,7 +64,7 @@ class VisitController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function ajaxGetSlots(Request $request)
+    public function getSlots(Request $request)
     {
         $this->validate($request, [
             'date'      => 'required|date|date_format:Y-m-d|after:yesterday',
@@ -66,6 +72,7 @@ class VisitController extends Controller
         ]);
 
         $slots = new Visit();
+        $slots->setSlotsPerDay($request->date);
         $busySlots = $slots->getSlotsByDayByDoctor($request->date, $request->doctorId);
         $freeSlots = $slots->getFreeSlots($busySlots);
 

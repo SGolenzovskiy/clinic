@@ -3,10 +3,15 @@
 namespace Clinic\Http\Controllers;
 
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Clinic\Models\Specialization;
 use Clinic\Models\Visit;
 
+/**
+ * Контроллер страниц.
+ *
+ * Class PageController
+ * @package Clinic\Http\Controllers
+ */
 class PageController extends Controller
 {
     /**
@@ -23,7 +28,6 @@ class PageController extends Controller
     }
 
     /**
-     *
      * Страница специализации
      * @param string $slug Slug специализации
      *
@@ -36,12 +40,13 @@ class PageController extends Controller
         $doctors = Specialization::where('slug', $slug)->firstOrFail()->doctors();
         $doctors = $doctors->select('id', 'surname', 'name', 'photo', 'specialization_id')->get();
 
-        $visits = new Visit();
-        $slots = [];
         $today = Carbon::now()->format('Y-m-d');
+        $visit = new Visit();
+        $visit->setSlotsPerDay($today);
+        $slots = [];
         foreach ($doctors as $doctor) {
-            $busySlots = $visits->getSlotsByDayByDoctor($today, $doctor->id);
-            $freeSlots = $visits->getFreeSlots($busySlots);
+            $busySlots = $visit->getSlotsByDayByDoctor($today, $doctor->id);
+            $freeSlots = $visit->getFreeSlots($busySlots);
             $slots[$doctor->id] = $freeSlots;
         }
 
