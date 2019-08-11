@@ -15,4 +15,9 @@ class Patient extends Model
     {
         return $this->hasMany('Clinic\Models\Visit');
     }
+
+    public function getByPhone($phone)
+    {
+        return ($this->where('phone', $phone)->first());
+    }
 }

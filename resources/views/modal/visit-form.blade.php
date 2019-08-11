@@ -11,20 +11,20 @@
                 @csrf
                 <div class="modal-body">
                         <div class="form-group">
-                            <label for="exampleFormControlInput1">Ваше имя</label>
+                            <label for="phone">Ваш телефон</label>
+                            <input type="text" class="form-control" name="phone" placeholder="мобильный" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="surname">Ваша Фамилия</label>
+                            <input type="text" class="form-control" name="surname" placeholder="фамилия" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Ваше имя</label>
                             <input type="text" class="form-control" name="name" placeholder="имя">
                         </div>
                         <div class="form-group">
-                            <label for="exampleFormControlInput1">Ваша Фамилия</label>
-                            <input type="text" class="form-control" name="surname" placeholder="фамилия">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleFormControlInput1">Ваша телефон</label>
-                            <input type="text" class="form-control" name="phone" placeholder="мобильный">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Дополнительные комментарии</label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <label for="note">Дополнительные комментарии</label>
+                            <textarea name="note" class="form-control" id="note" rows="3" placeholder="Пожелания"></textarea>
                         </div>
                 </div>
                 <div class="modal-footer">
