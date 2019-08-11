@@ -5,18 +5,17 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-4 col-sm-12">
-                    <img src="//cdn.pixabay.com/photo/2017/06/17/04/17/doctor-2411135_960_720.png" class="img-fluid"
-                         alt="Responsive image">
+                    @if($doctor->photo)
+                        <img src="{{ $doctor->photo }}" class="img-fluid" alt="Responsive image">
+                    @endif
                 </div>
                 <div class="col-lg-3 col-sm-12 my-4">
-                    @foreach(array_fill(0, rand(1, 24), 'TEMP!') as $temp)
-                        <a data-toggle="modal" data-target="#visitModal" href="#" class="badge badge-info mx-2">
-                            09:00 - 09:30
-                        </a>
-                    @endforeach
-                </div>
+                    @foreach($slots[$doctor->id] as $date => $time)
+                        <a data-slot="{{ $date }}" data-toggle="modal" data-target="#visitModal"
+                           href="#" class="badge badge-info mx-2">{{ $time[0] }} - {{ $time[1] }}</a>
+                    @endforeach</div>
                 <div class="col-lg-5 col-sm-12">
-                    <functional-calendar :is-date-picker='true'></functional-calendar>
+                    <div data-doctor-id="{{ $doctor->id }}" class="datepicker"></div>
                 </div>
             </div>
         </div>

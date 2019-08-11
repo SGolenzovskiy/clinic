@@ -21,17 +21,14 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
-import FunctionalCalendar from 'vue-functional-calendar';
-Vue.use(FunctionalCalendar, {
-    dayNames: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
-    monthNames: ['Январь' , 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь' , 'Октябрь' , 'Ноябрь' , 'Декабрь']
-});
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+import 'jquery-ui/ui/widgets/datepicker.js';
+import 'jquery-ui/ui/i18n/datepicker-ru';
 
 const app = new Vue({
     el: '#app',

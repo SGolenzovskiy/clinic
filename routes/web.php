@@ -14,4 +14,5 @@
 Route::get('/', ['uses' => 'PageController']);
 Route::get('{specialization}', ['uses' => 'PageController@view']);
 
-Route::post('ajax-visit', ['uses' => 'VisitController@visit'])->name('ajax-visit');
+Route::post('/ajax-visit', ['uses' => 'VisitController@visit'])->name('ajax-visit');
+Route::post('/ajax-slots', ['uses' => 'VisitController@ajaxGetSlots'])->name('ajax-slots');
