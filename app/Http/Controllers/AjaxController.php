@@ -2,10 +2,10 @@
 
 namespace Clinic\Http\Controllers;
 
-use Carbon\Carbon;
+use Clinic\Http\Requests\CreateVisitRequest;
+use Clinic\Http\Requests\SlotsVisitRequest;
 use Clinic\Models\Patient;
 use Clinic\Models\Visit;
-use Illuminate\Http\Request;
 
 /**
  * Контроллер Ajax запросов.
@@ -16,61 +16,51 @@ use Illuminate\Http\Request;
 class AjaxController extends Controller
 {
     /**
-     * Ajax регистрация визита
+     * Ajax. Регистрация визита.
      *
-     * @param Request $request
-     * @throws \Illuminate\Validation\ValidationException
+     * @param CreateVisitRequest $request
+     * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
      */
-    public function visit(Request $request)
+    public function createVisit(CreateVisitRequest $request)
     {
-        $this->validate($request, [
-            'surname'   => 'required',
-            'phone'     => 'required|digits:10|integer'
-        ]);
-
         $patient = new Patient();
         if (!$patient->getByPhone($request->phone)) {
             try {
-                $patient->phone = $request->phone;
-                $patient->surname = $request->surname;
+                $patient->phone     = $request->phone;
+                $patient->surname   = $request->surname;
+                $patient->name      = $request->name;
                 $patient->saveOrFail();
             } catch (\Exception $exception) {
-                var_dump($exception);
+                return response()->json([
+                    'message'   => 'Ошибка. Повторите запрос позднее.',
+                    'status'    => 'error',
+                    'redirect'  => ''
+                ]);
+
             }
         } else {
             $patient = $patient->getByPhone($request->phone);
         }
 
-        $date = '2019-08-10 10:30';
-        $doctorId = 1;
         $visit = new Visit();
-        if ($visit->isFreeSlotByDateByDoctor($date, $doctorId)) {
-            $visit->date = new Carbon();
-            $visit->doctor_id = $doctorId;
-            $visit->patient_id = $patient->id;
+        if ($visit->isFreeSlotByDateByDoctor($request->slot, $request->doctorId)) {
+            $visit->date        = $request->slot;
+            $visit->doctor_id   = $request->doctorId;
+            $visit->patient_id  = $patient->id;
+            $visit->note        = $patient->note;
             $visit->saveOrFail();
-
-            echo 'это успех';
-        } else {
-            echo 'доктор занят';
         }
     }
 
     /**
      * Ajax. Получить свободные слоты (номерки).
      *
-     * @param Request $request
+     * @param SlotsVisitRequest $request
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function getSlots(Request $request)
+    public function getSlots(SlotsVisitRequest $request)
     {
-        $this->validate($request, [
-            'date'      => 'required|date|date_format:Y-m-d|after:yesterday',
-            'doctorId'  => 'required'
-        ]);
-
         $slots = new Visit();
         $slots->setSlotsPerDay($request->date);
         $busySlots = $slots->getSlotsByDayByDoctor($request->date, $request->doctorId);

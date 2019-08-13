@@ -7,15 +7,15 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('ajax-visit') }}" method="post">
+            <form action="{{ route('ajax-visit') }}" id="js-create-visit" method="post">
                 @csrf
                 <div class="modal-body">
                         <div class="form-group">
-                            <label for="phone">Ваш телефон</label>
-                            <input type="text" class="form-control" name="phone" placeholder="мобильный" required>
+                            <label for="phone">Ваш телефон *</label>
+                            <input type="text" class="form-control" name="phone" placeholder="мобильный без +7" required>
                         </div>
                         <div class="form-group">
-                            <label for="surname">Ваша Фамилия</label>
+                            <label for="surname">Ваша фамилия *</label>
                             <input type="text" class="form-control" name="surname" placeholder="фамилия" required>
                         </div>
                         <div class="form-group">

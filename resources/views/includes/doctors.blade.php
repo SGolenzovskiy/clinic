@@ -10,10 +10,15 @@
                     @endif
                 </div>
                 <div class="col-lg-3 col-sm-12 my-4">
-                    @foreach($slots[$doctor->id] as $date => $time)
-                        <a data-slot="{{ $date }}" data-toggle="modal" data-target="#visitModal"
-                           href="#" class="badge badge-info mx-2">{{ $time[0] }} - {{ $time[1] }}</a>
-                    @endforeach</div>
+                    @if(count($slots[$doctor->id]) > 0)
+                        @foreach($slots[$doctor->id] as $date => $time)
+                            <a data-slot="{{ $date }}" data-doctor-id="{{ $doctor->id }}" data-toggle="modal" data-target="#visitModal"
+                               href="#" class="badge badge-info mx-2">{{ $time[0] }} - {{ $time[1] }}</a>
+                        @endforeach
+                    @else
+                        <div class="alert alert-warning" role="alert">Нет номерков для записи.</div>
+                    @endif
+                </div>
                 <div class="col-lg-5 col-sm-12">
                     <div data-doctor-id="{{ $doctor->id }}" class="datepicker"></div>
                 </div>
