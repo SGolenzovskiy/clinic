@@ -96,7 +96,12 @@ let clinicApp = {
 
                 axios.post('/ajax-visit', postData)
                     .then(function (response) {
-                        self.showResult(response);
+                        if (response.status === 'success') {
+                            self.showResult(response.data.message);
+                        } else {
+                            self.showResult(response.data.message);
+                            console.log(response.data.error);
+                        }
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -108,8 +113,8 @@ let clinicApp = {
     },
 
     showResult: function (response) {
-        this.modal.$body.html('Поздравляем! Запись произведена.');
-        this.modal.$footer.html(`<button type="button" class="btn btn-success" id="js-reload">Закрыть</button>`);
+        this.modal.$body.html(response);
+        this.modal.$footer.html(`<button type="button" class="btn btn-primary" id="js-reload">Закрыть</button>`);
 
         $('#js-reload').click(function() {
             location.reload();

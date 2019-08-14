@@ -6,6 +6,7 @@ use Clinic\Http\Requests\CreateVisitRequest;
 use Clinic\Http\Requests\SlotsVisitRequest;
 use Clinic\Models\Patient;
 use Clinic\Models\Visit;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Контроллер Ajax запросов.
@@ -24,32 +25,37 @@ class AjaxController extends Controller
      */
     public function createVisit(CreateVisitRequest $request)
     {
-        $patient = new Patient();
-        if (!$patient->getByPhone($request->phone)) {
-            try {
+        try {
+            DB::beginTransaction();
+            $patientModel = new Patient();
+            $patient  = $patientModel->getByPhone($request->phone);
+            if (!$patient->id) {
                 $patient->phone     = $request->phone;
                 $patient->surname   = $request->surname;
                 $patient->name      = $request->name;
                 $patient->saveOrFail();
-            } catch (\Exception $exception) {
-                return response()->json([
-                    'message'   => 'Ошибка. Повторите запрос позднее.',
-                    'status'    => 'error',
-                    'redirect'  => ''
-                ]);
-
             }
-        } else {
-            $patient = $patient->getByPhone($request->phone);
-        }
 
-        $visit = new Visit();
-        if ($visit->isFreeSlotByDateByDoctor($request->slot, $request->doctorId)) {
-            $visit->date        = $request->slot;
-            $visit->doctor_id   = $request->doctorId;
-            $visit->patient_id  = $patient->id;
-            $visit->note        = $patient->note;
-            $visit->saveOrFail();
+            $visit = new Visit();
+            if ($visit->isFreeSlotByDateByDoctor($request->slot, $request->doctorId)) {
+                $visit->date        = $request->slot;
+                $visit->doctor_id   = $request->doctorId;
+                $visit->patient_id  = $patient->id;
+                $visit->note        = $request->note;
+                $visit->saveOrFail();
+            }
+            DB::commit();
+            return response()->json([
+                'message'   => trans('app.ajax.visit_success'),
+                'status'    => 'success',
+            ]);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'message'   => trans('app.ajax.visit_error'),
+                'errors'    => $exception->getMessage(),
+                'status'    => 'error'
+            ]);
         }
     }
 
@@ -68,9 +74,7 @@ class AjaxController extends Controller
 
         return response()->json([
             'freeSlots' => $freeSlots,
-            'message'   => 'слоты на: ' . $request->date,
-            'status'    => 'success',
-            'redirect'  => ''
+            'status'    => 'success'
         ]);
     }
 }

@@ -70,7 +70,7 @@ class Visit extends Model
      */
     public function getSlotsByDayByDoctor($date, $doctorId)
     {
-        $slots = $this::where('date', 'like', "$date%")->where('doctor_id', $doctorId)->get();
+        $slots = $this->where('date', 'like', "$date%")->where('doctor_id', $doctorId)->get();
         $busySlots = [];
         foreach ($slots as $slot) {
             $busySlots[$slot->date] = null;
@@ -81,7 +81,7 @@ class Visit extends Model
 
     public function isFreeSlotByDateByDoctor($date, $doctorId)
     {
-        return ($this::where('date', 'like', "$date%")->where('doctor_id', $doctorId)->count() > 0) ? false : true;
+        return ($this->where('date', $date)->where('doctor_id', $doctorId)->count() > 0) ? false : true;
     }
 
     /**

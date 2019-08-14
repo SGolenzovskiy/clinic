@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Patient extends Model
 {
+    protected $fillable = ['phone'];
+
     /**
      * Получить визиты пациента.
      *
@@ -16,8 +18,16 @@ class Patient extends Model
         return $this->hasMany('Clinic\Models\Visit');
     }
 
+    /**
+     * Получить пациента по номеру телефона.
+     *
+     * @param $phone
+     * @return mixed
+     */
     public function getByPhone($phone)
     {
-        return ($this->where('phone', $phone)->first());
+        return $this->firstOrNew([
+            'phone' => $phone
+        ]);
     }
 }
