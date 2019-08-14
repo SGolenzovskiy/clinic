@@ -11,20 +11,24 @@
                 @csrf
                 <div class="modal-body">
                         <div class="form-group">
-                            <label for="phone">Ваш телефон *</label>
-                            <input type="text" class="form-control" name="phone" placeholder="мобильный без +7" required>
+                            <label for="phone">@lang('visitForm.create_visit.phone.label')</label>
+                            <input type="text" class="form-control" name="phone"
+                                   placeholder="@lang('visitForm.create_visit.phone.field')" required>
                         </div>
                         <div class="form-group">
-                            <label for="surname">Ваша фамилия *</label>
-                            <input type="text" class="form-control" name="surname" placeholder="фамилия" required>
+                            <label for="surname">@lang('visitForm.create_visit.surname.label')</label>
+                            <input type="text" class="form-control" name="surname"
+                                   placeholder="@lang('visitForm.create_visit.surname.field')" required>
                         </div>
                         <div class="form-group">
-                            <label for="name">Ваше имя</label>
-                            <input type="text" class="form-control" name="name" placeholder="имя">
+                            <label for="name">@lang('visitForm.create_visit.name.label')</label>
+                            <input type="text" class="form-control" name="name"
+                                   placeholder="@lang('visitForm.create_visit.name.field')">
                         </div>
                         <div class="form-group">
-                            <label for="note">Дополнительные комментарии</label>
-                            <textarea name="note" class="form-control" id="note" rows="3" placeholder="Пожелания"></textarea>
+                            <label for="note">@lang('visitForm.create_visit.note.label')</label>
+                            <textarea name="note" class="form-control" id="note" rows="3"
+                                      placeholder="@lang('visitForm.create_visit.note.field')"></textarea>
                         </div>
                 </div>
                 <div class="modal-footer">
