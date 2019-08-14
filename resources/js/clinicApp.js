@@ -22,7 +22,7 @@ let clinicApp = {
             dateFormat: 'yy-mm-dd',
             onSelect: function (date) {
                 self.$calendar = $(this);
-                self.$doctorCard = $(this).parent().prev();
+                self.$doctorCard = $(this).parent().next();
                 self.setDoctorId(this);
                 self.getSlots(date);
             }
@@ -66,7 +66,7 @@ let clinicApp = {
         if (freeSlots.length !== 0) {
             $.each(freeSlots, function(slot, time) {
                 data += `<a data-slot="${slot}" data-doctor-id="${doctorId}" data-toggle="modal" data-target="#visitModal" 
-            href="#" class="badge badge-info mx-2">${time[0]} - ${time[1]}</a> `;
+            href="#" class="badge badge-info ml-4">${time[0]} - ${time[1]}</a> `;
             });
         } else {
             data = `<div class="alert alert-warning" role="alert">Нет номерков для записи.</div>`;
@@ -108,7 +108,7 @@ let clinicApp = {
     },
 
     showResult: function (response) {
-        this.modal.$body.html('вы записались');
+        this.modal.$body.html('Поздравляем! Запись произведена.');
         this.modal.$footer.html(`<button type="button" class="btn btn-success" id="js-reload">Закрыть</button>`);
 
         $('#js-reload').click(function() {
