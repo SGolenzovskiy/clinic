@@ -6,7 +6,7 @@
             <div class="pt-4">
                 <div class="shadow-lg p-3 mb-5 bg-white rounded">
                     <div class="p-3 mb-1">
-                        <h1>Запись к стоматологу</h1>
+                        <h1>@lang('app.title')</h1>
                     </div>
 
                     <div class="col-12">
@@ -21,7 +21,7 @@
                             @include('includes.doctors', ['doctors' => $doctors])
                         @else
                             <div class="alert alert-warning" role="alert">
-                                Пожалуйста, выберите категорию для записи.
+                                @lang('app.choice_category')
                             </div>
                         @endif
                     </div>

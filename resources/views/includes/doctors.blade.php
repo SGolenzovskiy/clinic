@@ -35,6 +35,6 @@
 </div>
 @else
     <div class="alert alert-danger" role="alert">
-        Нет таких специалистов.
+        @lang('app.empty_category')
     </div>
 @endif
